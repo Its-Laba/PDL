@@ -1,7 +1,7 @@
 package Analizador_Lexico;
 
 import Token.Token;
-
+import Tabla_Simbolos.Tabla_Simbolos;
 import java.io.*;
 
 public class Analizador_Lexico {
@@ -11,21 +11,34 @@ public class Analizador_Lexico {
     public static Long num = 0L;
     private File file = null;
     private FileReader reader = null;
+    private BufferedWriter wr ;
 
-    private char[] aux;
+    public char[] aux;
+
+    public Analizador_Lexico(){
+
+    }
 
     // Metodo para leer el fichero
 
     public void readFile(File fichero) throws FileNotFoundException {
+        try {
         this.file = fichero;
         if (file == null) {
             System.err.println("Error: Fichero no encontrado.");
         }
         this.reader = new FileReader(this.file);
         aux = new char[(int) file.length()];
-        try {
-            reader.read(aux);
+
+        reader.read(aux);
+        linea ++;
+        File file_ruta = new File("tokens.txt");
+        FileWriter fw = new FileWriter(file_ruta);
+
+        this.wr = new BufferedWriter(fw);
+
         } catch (IOException e) {
+            if (wr == null){System.out.println("WR: !!!!!!!!!!!!!!");}
             System.err.println("Error: Error en lectura de fichero.");
         }
 
@@ -45,7 +58,7 @@ public class Analizador_Lexico {
 
     // Proceso principal
     // #TODO PALABRAS RESERVADAS [IF, IF-ELSE] , GESTION DE ERRORES
-    public Token procPrincipal(char[] lectura) {
+    public Token procPrincipal(char[] lectura, Tabla_Simbolos tabla) throws IOException {
         Token token = null;
         if (puntero == lectura.length) {
             // Final del fichero
@@ -55,7 +68,7 @@ public class Analizador_Lexico {
             if (lectura[puntero] == '/') {
                 basura(lectura);
             }
-        } else if (lectura[puntero] == '\n') {
+        } else if (lectura[puntero] == '\n' || lectura[puntero] == '\r') {
             puntero++;
             linea++;
         } else if (lectura[puntero] == '\"') {
@@ -126,12 +139,23 @@ public class Analizador_Lexico {
                 token = new Token("BOOL",cad);
             }else if (cad.equals("false")){
                 token = new Token("BOOL",cad);
+            }else if (tabla.palabraRes(cad)){
+                token = new Token("RES",cad);
+            } else{
+                token = new Token("ID",cad);
             }
-            //#TODO TABLA DE SIMBOLOS
+
         }
 
         else{
             System.err.println("Error linea: "+ linea.toString()+" caracter no reconocido");
+        }
+        if(token != null){
+        this.wr.write(token.toString());
+        this.wr.newLine();
+        this.wr.flush();
+        if (token.getCodigo().equals("EOF")){
+            wr.close();}
         }
         return token;
     }
@@ -193,5 +217,7 @@ public class Analizador_Lexico {
             palabra(lectura);
         }
     }
+
+
 
 }

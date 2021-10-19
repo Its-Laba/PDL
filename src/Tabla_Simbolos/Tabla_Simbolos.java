@@ -2,6 +2,8 @@ package Tabla_Simbolos;
 
 import Token.Token;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Tabla_Simbolos {
@@ -10,7 +12,7 @@ public class Tabla_Simbolos {
     private ArrayList<Object[]> Tabla ;
     private int desp = 0;
 
-// #TODO GETS, VOLCADO y BORRADO
+    // #TODO GETS, VOLCADO y BORRADO
     public Tabla_Simbolos(){
         Tabla = new ArrayList<Object[]>();
         addPR();
@@ -64,15 +66,14 @@ public class Tabla_Simbolos {
 
     public void addToken(Token token){
         /*
-        * Posicion 0 = Lexema
-        * Posicion 1 = Tipo
-        * Posicion 2 = Direccion
-        * ----Solo funciones------
-        * Posicion 3 = Nª Parametros
-        * Posicion 4 = Tipos Parametros
-        * Posicion 5 = Tipo devuelto
-        * Posicion 6 = Etiqueta
-        * */
+         * Posicion 0 = Lexema
+         * Posicion 1 = Tipo
+         * Posicion 2 = Direccion
+         * ----Solo funciones------
+         * Posicion 3 = Nª Parametros
+         * Posicion 4 = Tipo devuelto
+         * Posicion 5 = Etiqueta
+         * */
         boolean eslocal = false;
         if(registros > 0 && this.Tabla.get(registros-1)[0] instanceof Tabla_Simbolos){
             Tabla_Simbolos tLocal = (Tabla_Simbolos) Tabla.get(registros-1)[0];
@@ -80,9 +81,9 @@ public class Tabla_Simbolos {
             eslocal = true;
         }
         if (!eslocal){
-        this.Tabla.add(new Object[7]); // Incrementa posicion
-        this.Tabla.get(registros)[0] = token.getAtributo();
-        registros++;
+            this.Tabla.add(new Object[6]); // Incrementa posicion
+            this.Tabla.get(registros)[0] = token.getAtributo();
+            registros++;
         }
     }
 
@@ -103,17 +104,15 @@ public class Tabla_Simbolos {
         // menos dos porque ya se ha creado la primera entrada de la tabla de la funcion
         this.Tabla.get(registros-2)[3] = par;
     }
-    public void tipoPar(String tipo){
-        // menos dos porque ya se ha creado la primera entrada de la tabla de la funcion
-        this.Tabla.get(registros-2)[4] = tipo;
-    }
+
     public void addEtiqueta () {
         String etiqueta = "FUNCION ";
         etiqueta +=  this.Tabla.get(registros-2)[0];
-        this.Tabla.get(registros-2)[6] = etiqueta;
+        this.Tabla.get(registros-2)[5] = etiqueta;
     }
     public void addDevolver (String tipo){
-        this.Tabla.get(registros-2)[5] = tipo;
+
+        this.Tabla.get(registros-2)[4] = tipo;
     }
     public void addDire (Token token, int size){
         if (this.buscar(token.getAtributo())[0] != null){
@@ -137,21 +136,83 @@ public class Tabla_Simbolos {
             local[1] = 1;
         }
         if (local[0] == null){
-        Integer[] contador = new Integer[2];
-        contador[0] = 0;
-        contador[1] = 0;
-        boolean encontrado = false;
-        while(contador[0] < this.Tabla.size() && !encontrado){
-            if(this.Tabla.get(contador[0])[0].equals(cadena)){
-                encontrado = true;
-            }else
-                contador[0]++;
-        }
-        if (!encontrado){
-            contador[0] = null;
-        }
-        return contador;}
+            Integer[] contador = new Integer[2];
+            contador[0] = 0;
+            contador[1] = 0;
+            boolean encontrado = false;
+            while(contador[0] < this.Tabla.size() && !encontrado){
+                if(this.Tabla.get(contador[0])[0].equals(cadena)){
+                    encontrado = true;
+                }else
+                    contador[0]++;
+            }
+            if (!encontrado){
+                contador[0] = null;
+            }
+            return contador;}
         return local;
     }
+    public boolean palabraRes (String cadena){
+        return "if".equals(cadena) || "else".equals(cadena) ||
+                "function".equals(cadena) || "input".equals(cadena) ||
+                "let".equals(cadena) || "return".equals(cadena) ||
+                "print".equals(cadena) || "int".equals(cadena) ||
+                "string".equals(cadena) || "bool".equals(cadena);
+    }
 
+    public void printTabla(BufferedWriter wr)throws IOException {
+        Tabla_Simbolos printear;
+        if (this.Tabla.get(registros-1)[0] instanceof Tabla_Simbolos){
+            // tabla de funcion
+            printear = (Tabla_Simbolos) this.Tabla.get(registros-1)[0] ;
+            wr.newLine();
+            wr.newLine();
+            wr.newLine();
+        }else {
+            // tabla pricipal
+            printear = this;
+            wr.write("TABLA GLOBAL");
+            wr.newLine();
+            wr.newLine();
+        }
+        for (int i = 0; i<printear.Tabla.size(); i++){
+            Object[] fila = printear.Tabla.get(i);
+
+            for (int j = 0; j < fila.length && fila[j] != null; j++){
+
+                if (j == 0) {
+                    wr.write(" LEXEMA : '" + fila[j].toString() + "'");
+                    wr.newLine();
+                } else if (j == 1) {
+                    wr.write("\tATRIBUTOS : ");
+                    wr.newLine();
+                    wr.write(
+                            "\t\t- tipo : '" + fila[j].toString() + "'");
+                    wr.newLine();
+                } else if (j == 2) {
+                    wr.write(
+                            "\t\t- dirección : " + fila[j].toString());
+                    wr.newLine();
+                } else if (j == 3) {
+                    wr.write(
+                            "\t\t- número de parámetros : " + fila[j].toString());
+                    wr.newLine();
+                }
+                else if (j == 5) {
+                    wr.write(
+                            "\t\t- tipo devuelto : '" + fila[j].toString() + "'");
+                    wr.newLine();
+                } else if (j == 6) {
+                    wr.write(
+                            "\t\t- etiqueta : '" + fila[j].toString() + "'");
+                    wr.newLine();
+                }
+                wr.flush();
+            }
+
+        }
+        wr.newLine();
+        wr.write("-------------------------------------------------");
+        wr.newLine();
+    }
 }
