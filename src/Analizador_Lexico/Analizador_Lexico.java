@@ -62,6 +62,7 @@ public class Analizador_Lexico {
         Token token = null;
         if (puntero == lectura.length) {
             // Final del fichero
+            puntero++;
             token = new Token("EOF",null);
         } else if (lectura[puntero] == '/') {
             puntero++;
@@ -157,8 +158,7 @@ public class Analizador_Lexico {
         this.wr.write(token.toString());
         this.wr.newLine();
         this.wr.flush();
-        if (token.getCodigo().equals("EOF")){
-            wr.close();}
+
         }
         return token;
     }
