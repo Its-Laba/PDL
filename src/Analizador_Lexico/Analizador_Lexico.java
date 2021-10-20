@@ -57,7 +57,7 @@ public class Analizador_Lexico {
     }
 
     // Proceso principal
-    // #TODO PALABRAS RESERVADAS [IF, IF-ELSE] , GESTION DE ERRORES
+    // #TODO GESTION DE ERRORES
     public Token procPrincipal(char[] lectura, Tabla_Simbolos tabla) throws IOException {
         Token token = null;
         if (puntero == lectura.length) {
@@ -134,7 +134,7 @@ public class Analizador_Lexico {
             cad = Character.toString(lectura[puntero]);
             puntero++;
             palabra(lectura);
-
+            Integer punt [] = tabla.buscar(cad);
             if (cad.equals("true")){
                 token = new Token("BOOL",cad);
             }else if (cad.equals("false")){
@@ -142,7 +142,10 @@ public class Analizador_Lexico {
             }else if (tabla.palabraRes(cad)){
                 token = new Token("RES",cad);
             } else{
-                token = new Token("ID",cad);
+                if (punt[0] == null){
+                    tabla.addToken(new Token("ID",cad));
+                }
+                token = new Token("ID",tabla.buscar(cad)[0].toString());
             }
 
         }

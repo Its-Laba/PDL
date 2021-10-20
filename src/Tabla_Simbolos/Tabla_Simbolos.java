@@ -12,7 +12,7 @@ public class Tabla_Simbolos {
     private ArrayList<Object[]> Tabla ;
     private int desp = 0;
 
-    // #TODO GETS, VOLCADO y BORRADO
+    // #TODO GETS y BORRADO
     public Tabla_Simbolos(){
         Tabla = new ArrayList<Object[]>();
         addPR();
@@ -55,9 +55,9 @@ public class Tabla_Simbolos {
         this.addDire(new Token("RES", "string"), "string".length());
         this.addTipo(new Token("RES", "string"), "RES");
 
-        this.addToken(new Token("RES", "bool"));
-        this.addDire(new Token("RES", "bool"), "bool".length());
-        this.addTipo(new Token("RES", "bool"), "RES");
+        this.addToken(new Token("RES", "boolean"));
+        this.addDire(new Token("RES", "boolean"), "boolean".length());
+        this.addTipo(new Token("RES", "boolean"), "RES");
     }
 
     public ArrayList<Object[]> getTabla() {
@@ -157,7 +157,7 @@ public class Tabla_Simbolos {
                 "function".equals(cadena) || "input".equals(cadena) ||
                 "let".equals(cadena) || "return".equals(cadena) ||
                 "print".equals(cadena) || "int".equals(cadena) ||
-                "string".equals(cadena) || "bool".equals(cadena);
+                "string".equals(cadena) || "boolean".equals(cadena);
     }
 
     public void printTabla(BufferedWriter wr)throws IOException {
@@ -171,7 +171,7 @@ public class Tabla_Simbolos {
         }else {
             // tabla pricipal
             printear = this;
-            wr.write("TABLA GLOBAL");
+            wr.write("TABLA PRINCIPAL # 1 :");
             wr.newLine();
             wr.newLine();
         }
@@ -181,30 +181,30 @@ public class Tabla_Simbolos {
             for (int j = 0; j < fila.length && fila[j] != null; j++){
 
                 if (j == 0) {
-                    wr.write(" LEXEMA : '" + fila[j].toString() + "'");
+                    wr.write("* LEXEMA : '" + fila[j].toString() + "'");
                     wr.newLine();
                 } else if (j == 1) {
                     wr.write("\tATRIBUTOS : ");
                     wr.newLine();
                     wr.write(
-                            "\t\t- tipo : '" + fila[j].toString() + "'");
+                            "\t+ tipo : '" + fila[j].toString() + "'");
                     wr.newLine();
                 } else if (j == 2) {
                     wr.write(
-                            "\t\t- dirección : " + fila[j].toString());
+                            "\t+ dirección : " + fila[j].toString());
                     wr.newLine();
                 } else if (j == 3) {
                     wr.write(
-                            "\t\t- número de parámetros : " + fila[j].toString());
+                            "\t+ número de parámetros : " + fila[j].toString());
                     wr.newLine();
                 }
                 else if (j == 5) {
                     wr.write(
-                            "\t\t- tipo devuelto : '" + fila[j].toString() + "'");
+                            "\t+ tipo devuelto : '" + fila[j].toString() + "'");
                     wr.newLine();
                 } else if (j == 6) {
                     wr.write(
-                            "\t\t- etiqueta : '" + fila[j].toString() + "'");
+                            "\t+ etiqueta : '" + fila[j].toString() + "'");
                     wr.newLine();
                 }
                 wr.flush();
@@ -214,5 +214,17 @@ public class Tabla_Simbolos {
         wr.newLine();
         wr.write("-------------------------------------------------");
         wr.newLine();
+    }
+
+    public int getDesp() {
+        return desp;
+    }
+
+    public int getIndice() {
+        return indice;
+    }
+
+    public int getRegistros() {
+        return registros;
     }
 }
