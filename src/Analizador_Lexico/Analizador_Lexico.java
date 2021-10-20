@@ -76,7 +76,7 @@ public class Analizador_Lexico {
             puntero++;
             cad ="";
             cadena(lectura);
-            token = new Token("CAD",cad);
+            token = new Token("CAD","\""+cad+"\"");
         }else if (lectura[puntero] == ' ' || lectura[puntero] == '\t'){
             // No se genera token por un espacio
             puntero++;
@@ -141,6 +141,9 @@ public class Analizador_Lexico {
             }else if (cad.equals("false")){
                 token = new Token("BOOL",cad);
             }else if (tabla.palabraRes(cad)){
+                if (punt[0] == null){
+                    tabla.addPR(cad);
+                }
                 token = new Token("RES",cad);
             } else{
                 if (punt[0] == null){

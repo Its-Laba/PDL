@@ -15,49 +15,61 @@ public class Tabla_Simbolos {
     // #TODO GETS y BORRADO
     public Tabla_Simbolos(){
         Tabla = new ArrayList<Object[]>();
-        addPR();
+
     }
-    private void addPR()  {
-
-        this.addToken(new Token("RES", "function"));
-        this.addDire(new Token("RES", "function"), "function".length());
-        this.addTipo(new Token("RES", "function"), "RES");
-
+    public void addPR(String cad)  {
+    switch (cad){
+        case("function"):
+            this.addToken(new Token("RES", "function"));
+            this.addDire(new Token("RES", "function"), "function".length());
+            this.addTipo(new Token("RES", "function"), "RES");
+            break;
+        case("if"):
         this.addToken(new Token("RES", "if"));
         this.addDire(new Token("RES", "if"), "if".length());
         this.addTipo(new Token("RES", "if"), "RES");
-
+        break;
+        case("else"):
         this.addToken(new Token("RES", "else"));
         this.addDire(new Token("RES", "else"), "else".length());
         this.addTipo(new Token("RES", "else"), "RES");
-
+        break;
+        case("input"):
         this.addToken(new Token("RES", "input"));
         this.addDire(new Token("RES", "input"), "input".length());
         this.addTipo(new Token("RES", "input"), "RES");
-
+        break;
+        case("let"):
         this.addToken(new Token("RES", "let"));
         this.addDire(new Token("RES", "let"), "let".length());
         this.addTipo(new Token("RES", "let"), "RES");
-
+        break;
+        case("return"):
         this.addToken(new Token("RES", "return"));
         this.addDire(new Token("RES", "return"), "return".length());
         this.addTipo(new Token("RES", "return"), "RES");
-
+        break;
+        case("print"):
         this.addToken(new Token("RES", "print"));
         this.addDire(new Token("RES", "print"), "print".length());
         this.addTipo(new Token("RES", "print"), "RES");
-
+        break;
+        case("int"):
         this.addToken(new Token("RES", "int"));
         this.addDire(new Token("RES", "int"), "int".length());
         this.addTipo(new Token("RES", "int"), "RES");
-
+        break;
+        case("string"):
         this.addToken(new Token("RES", "string"));
         this.addDire(new Token("RES", "string"), "string".length());
         this.addTipo(new Token("RES", "string"), "RES");
-
+        break;
+        case("boolean"):
         this.addToken(new Token("RES", "boolean"));
         this.addDire(new Token("RES", "boolean"), "boolean".length());
         this.addTipo(new Token("RES", "boolean"), "RES");
+        break;
+    }
     }
 
     public ArrayList<Object[]> getTabla() {
