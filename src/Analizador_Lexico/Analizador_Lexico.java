@@ -38,7 +38,6 @@ public class Analizador_Lexico {
         this.wr = new BufferedWriter(fw);
 
         } catch (IOException e) {
-            if (wr == null){System.out.println("WR: !!!!!!!!!!!!!!");}
             System.err.println("Error: Error en lectura de fichero.");
         }
 
@@ -140,10 +139,8 @@ public class Analizador_Lexico {
                 token = new Token("BOOL",cad);
             }else if (cad.equals("false")){
                 token = new Token("BOOL",cad);
-            }else if (tabla.palabraRes(cad)){
-                if (punt[0] == null){
-                    tabla.addPR(cad);
-                }
+            }else if (palRes(cad)){
+
                 token = new Token("RES",cad);
             } else{
                 if (punt[0] == null){
@@ -222,6 +219,14 @@ public class Analizador_Lexico {
             puntero++;
             palabra(lectura);
         }
+    }
+
+    public boolean palRes(String cadena){
+        return "if".equals(cadena) || "else".equals(cadena) ||
+                "function".equals(cadena) || "input".equals(cadena) ||
+                "let".equals(cadena) || "return".equals(cadena) ||
+                "print".equals(cadena) || "int".equals(cadena) ||
+                "string".equals(cadena) || "boolean".equals(cadena);
     }
 
 

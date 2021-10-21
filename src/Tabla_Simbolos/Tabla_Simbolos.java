@@ -12,7 +12,7 @@ public class Tabla_Simbolos {
     private ArrayList<Object[]> Tabla ;
     private int desp = 0;
 
-    // #TODO GETS y BORRADO
+    // #TODO BORRADO
     public Tabla_Simbolos(){
         Tabla = new ArrayList<Object[]>();
 
@@ -164,13 +164,7 @@ public class Tabla_Simbolos {
             return contador;}
         return local;
     }
-    public boolean palabraRes (String cadena){
-        return "if".equals(cadena) || "else".equals(cadena) ||
-                "function".equals(cadena) || "input".equals(cadena) ||
-                "let".equals(cadena) || "return".equals(cadena) ||
-                "print".equals(cadena) || "int".equals(cadena) ||
-                "string".equals(cadena) || "boolean".equals(cadena);
-    }
+
 
     public void printTabla(BufferedWriter wr)throws IOException {
         Tabla_Simbolos printear;
